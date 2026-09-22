@@ -1,0 +1,61 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+*.ipr
+*.iws
+.idea/
+*.class
+*.lock
+
+# Android
+android/
+android/local.properties
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/gradle/
+android/app/debug/
+android/app/release/
+
+# iOS/macOS
+ios/
+macos/
+*.xcworkspace
+*.xcodeproj
+Pods/
+.symlinks/
+
+# Windows build artifacts (keep windows/ source, ignore build output)
+build/windows/
+
+# Web
+web/
+
+# Linux
+linux/
+
+# Environment / secrets — NEVER commit these
+.env
+.env.*
+secrets.dart
+**/secrets/**
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json
+
+# Coverage
+coverage/
+lcov.info
