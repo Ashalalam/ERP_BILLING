@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../../core/utils/industry_config.dart';
 import '../../services/supabase_service.dart';
 import '../../models/models.dart';
 import '../../core/utils/fefo_selector.dart';
@@ -19,6 +19,7 @@ class FastPosView extends StatefulWidget {
 
 class _FastPosViewState extends State<FastPosView> {
   final _db = SupabaseService.instance;
+  final _cfg = IndustryState.instance;
   final _barcodeController = TextEditingController();
   final _patientNameController = TextEditingController(text: 'Rahul Sharma');
   final _doctorNameController = TextEditingController(text: 'Dr. A. K. Gupta');
@@ -258,6 +259,7 @@ class _FastPosViewState extends State<FastPosView> {
           ),
         ),
         actions: [
+          // ── Share & communicate ──────────────────────────────
           TextButton.icon(
             onPressed: () {
               final waUrl = ShareService.buildWhatsAppInvoiceUrl(
@@ -270,8 +272,13 @@ class _FastPosViewState extends State<FastPosView> {
           TextButton.icon(
             onPressed: () {
               if (_selectedParty?.email != null) {
-                final mailUrl = ShareService.buildEmailInvoiceUrl(invoice, _selectedParty!.email!);
+                final mailUrl = ShareService.buildEmailInvoiceUrl(
+                    invoice, _selectedParty!.email!);
                 ShareService.launchEmail(context, mailUrl);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('No email on file for this customer.')),
+                );
               }
             },
             icon: const Icon(Icons.email),
@@ -287,17 +294,30 @@ class _FastPosViewState extends State<FastPosView> {
           ),
           ElevatedButton.icon(
             onPressed: () async {
-              await PdfGenerator.sharePdf(invoice, _db.activeCompany!, _selectedParty, items);
+              await PdfGenerator.sharePdf(
+                  invoice, _db.activeCompany!, _selectedParty, items);
             },
             icon: const Icon(Icons.share),
-            label: const Text('PDF / Share'),
+            label: const Text('PDF'),
           ),
-          TextButton(
+          const SizedBox(width: 16),
+          // ── Close actions ─────────────────────────────────────
+          OutlinedButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              // Keep cart — useful if billing same customer again
+            },
+            icon: const Icon(Icons.close),
+            label: const Text('Close'),
+          ),
+          ElevatedButton.icon(
             onPressed: () {
               Navigator.pop(context);
               setState(() => _cartItems.clear());
             },
-            child: const Text('New Order'),
+            icon: const Icon(Icons.add_shopping_cart),
+            label: const Text('New Order'),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
           ),
         ],
       ),
@@ -425,7 +445,7 @@ class _FastPosViewState extends State<FastPosView> {
                       onChanged: (v) => setState(() => _searchQuery = v),
                     ),
                     const SizedBox(height: 12),
-                    const Text('Quick Product Selection (FEFO Auto Batch):', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('${_cfg.config.productLabel} Catalog (${_cfg.config.batchLabel} Auto-Select):', style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Expanded(
                       child: GridView.builder(
@@ -497,13 +517,13 @@ class _FastPosViewState extends State<FastPosView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('POS Checkout Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text('${_cfg.config.posLabel} — Cart', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 12),
                     // Customer selector
                     DropdownButtonFormField<Party>(
                       value: _selectedParty,
                       isExpanded: true,
-                      decoration: const InputDecoration(labelText: 'Customer', prefixIcon: Icon(Icons.person), isDense: true),
+                      decoration: InputDecoration(labelText: _cfg.config.customerLabel, prefixIcon: const Icon(Icons.person), isDense: true),
                       items: customers.map((p) => DropdownMenuItem(value: p, child: Text(p.name))).toList(),
                       onChanged: (v) {
                         setState(() {
@@ -653,7 +673,7 @@ class _FastPosViewState extends State<FastPosView> {
                       child: ElevatedButton.icon(
                         onPressed: _finalizeInvoice,
                         icon: const Icon(Icons.receipt_long),
-                        label: const Text('FINALIZE GST INVOICE (F9)'),
+                        label: Text('FINALIZE ${_cfg.config.invoiceLabel.toUpperCase()}'),
                         style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
                       ),
                     ),

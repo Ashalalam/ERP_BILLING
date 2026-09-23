@@ -1,6 +1,5 @@
-# erp_billing
-
-A new Flutter project.
+# BillSprout — Smart ERP & Billing by LIFESPROUT Care
+# A new Flutter project.
 
 ## Getting Started
 

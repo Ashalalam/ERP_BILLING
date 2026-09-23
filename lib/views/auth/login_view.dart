@@ -11,7 +11,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final _emailController = TextEditingController(text: 'pharmacist@apexpharma.com');
+  final _emailController = TextEditingController(text: 'pharmacist@billsprout.com');
   final _passwordController = TextEditingController(text: 'password123');
   bool _loading = false;
   bool _obscurePassword = true;
@@ -64,13 +64,21 @@ class _LoginViewState extends State<LoginView> {
               const Icon(Icons.local_pharmacy, size: 56, color: Color(0xFF0F52BA)),
               const SizedBox(height: 16),
               Text(
-                'Apex Pharmaceutical ERP',
+                'BillSprout',
                 textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold, letterSpacing: 1),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'by LIFESPROUT Care',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: Colors.grey, letterSpacing: 2),
               ),
               const SizedBox(height: 8),
               Text(
-                'Cross-Platform ERP & Billing System',
+                'Smart ERP & Billing System',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),

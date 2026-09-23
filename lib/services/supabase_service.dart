@@ -64,6 +64,9 @@ class SupabaseService extends ChangeNotifier {
   List<StockAdjustment> get stockAdjustments => List.unmodifiable(_stockAdjustments);
   List<AppUser> get users => List.unmodifiable(_users);
 
+  /// Safe static accessor for widgets that can't use dependency injection
+  static SupabaseService? _getInstanceForWidget() => instance;
+
   void setActiveCompany(Company company) {
     _activeCompany = company;
     notifyListeners();
@@ -915,7 +918,7 @@ class SupabaseService extends ChangeNotifier {
 
   void _seedInitialDemoData() {
     final company = Company(
-      name: 'Apex Pharma & Healthcare ERP',
+      name: 'BillSprout Demo Company',
       gstin: '27AAAAA0000A1Z5',
       address: '101 Healthcare Plaza, Mumbai, India',
       phone: '+91 9876543210',
@@ -926,13 +929,13 @@ class SupabaseService extends ChangeNotifier {
     _companies.add(company);
     _activeCompany = company;
 
-    final store1 = Store(companyId: company.id, name: 'Apex Pharmacy - Downtown Branch', address: 'Downtown');
-    final store2 = Store(companyId: company.id, name: 'Apex Pharmacy - Express Outlet', address: 'Uptown');
+    final store1 = Store(companyId: company.id, name: 'BillSprout - Main Branch', address: 'Main Branch');
+    final store2 = Store(companyId: company.id, name: 'BillSprout - Express Outlet', address: 'Uptown');
     _stores.addAll([store1, store2]);
 
     final user = AppUser(
       companyId: company.id,
-      email: 'admin@apexpharma.com',
+      email: 'admin@billsprout.com',
       fullName: 'Primary Authorized User',
       roleName: 'System Administrator',
       permissions: {'all': true},

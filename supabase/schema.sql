@@ -1,5 +1,6 @@
 -- ============================================================
--- Pharmaceutical ERP & Billing — Full Supabase PostgreSQL Schema
+-- BillSprout — Smart ERP & Billing by LIFESPROUT Care
+-- Full Supabase PostgreSQL Schema
 -- Run this in: Supabase Dashboard → SQL Editor → New Query → Run
 -- ============================================================
 

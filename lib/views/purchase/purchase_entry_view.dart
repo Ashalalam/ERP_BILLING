@@ -56,6 +56,8 @@ class _PurchaseEntryViewState extends State<PurchaseEntryView> {
       return;
     }
 
+    try {
+
     // Create / find batch for each line
     final itemsData = <Map<String, dynamic>>[];
     for (final line in _lines) {
@@ -110,9 +112,27 @@ class _PurchaseEntryViewState extends State<PurchaseEntryView> {
         SnackBar(
           content: Text('Purchase invoice ${_invoiceNumberCtrl.text} saved. Stock updated.'),
           backgroundColor: Colors.green,
+          duration: const Duration(seconds: 3),
         ),
       );
-      Navigator.pop(context);
+      // Reset the form for a new entry instead of popping
+      setState(() {
+        _lines.clear();
+        _invoiceNumberCtrl.text =
+            'PUR-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+        _addLine();
+      });
+    }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving purchase: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
     }
   }
 

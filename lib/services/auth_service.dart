@@ -104,7 +104,7 @@ class AuthService extends ChangeNotifier {
 
   void initializeDemoUser() {
     if (_currentUser == null) {
-      _currentUser = _buildDemoUser('pharmacist@apexpharma.com');
+      _currentUser = _buildDemoUser('admin@billsprout.com');
       _isAuthenticated = true;
       notifyListeners();
     }

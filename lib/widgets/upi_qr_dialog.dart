@@ -7,8 +7,8 @@ Future<void> showUpiQrDialog(
   BuildContext context, {
   required double amount,
   required String invoiceNumber,
-  String vpa = 'apexpharma@upi',
-  String payeeName = 'Apex Pharma',
+  String vpa = 'billsprout@upi',
+  String payeeName = 'BillSprout',
 }) async {
   final upiString =
       'upi://pay?pa=$vpa&pn=${Uri.encodeComponent(payeeName)}'

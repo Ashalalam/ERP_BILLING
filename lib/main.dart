@@ -30,21 +30,21 @@ void main() async {
   // Load data (from Supabase or demo fallback)
   await SupabaseService.instance.initialize();
 
-  runApp(const PharmaErpApp());
+  runApp(const BillSproutApp());
 }
 
-class PharmaErpApp extends StatefulWidget {
-  const PharmaErpApp({super.key});
+class BillSproutApp extends StatefulWidget {
+  const BillSproutApp({super.key});
 
   @override
-  State<PharmaErpApp> createState() => _PharmaErpAppState();
+  State<BillSproutApp> createState() => _BillSproutAppState();
 }
 
-class _PharmaErpAppState extends State<PharmaErpApp> {
+class _BillSproutAppState extends State<BillSproutApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pharmaceutical ERP & Billing Software',
+      title: 'BillSprout — Smart ERP & Billing by LIFESPROUT Care',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
