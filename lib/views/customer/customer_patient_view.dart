@@ -97,51 +97,60 @@ class _CustomerPatientViewState extends State<CustomerPatientView>
                         '${c.phone ?? 'No phone'} | ${c.email ?? 'No email'}\n'
                         'Tier: ${c.pricingTier} | GSTIN: ${c.gstin ?? 'N/A'}'),
                     isThreeLine: true,
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('₹${totalPurchases.toStringAsFixed(0)}',
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (c.phone != null)
+                    trailing: SizedBox(
+                      width: 160,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('₹${totalPurchases.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 13)),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (c.phone != null)
+                                IconButton(
+                                  icon: const Icon(Icons.message,
+                                      color: Colors.green, size: 16),
+                                  tooltip: 'WhatsApp',
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                      minWidth: 28, minHeight: 28),
+                                  onPressed: () => ShareService.launchWhatsApp(
+                                      context,
+                                      'https://wa.me/${c.phone!.replaceAll(RegExp(r'[^\d]'), '')}'),
+                                ),
+                              if (c.email != null)
+                                IconButton(
+                                  icon: const Icon(Icons.email,
+                                      color: Colors.blue, size: 16),
+                                  tooltip: 'Email',
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                      minWidth: 28, minHeight: 28),
+                                  onPressed: () => ShareService.launchEmail(
+                                      context, 'mailto:${c.email}'),
+                                ),
                               IconButton(
-                                icon: const Icon(Icons.message,
-                                    color: Colors.green, size: 18),
-                                tooltip: 'WhatsApp',
+                                icon: const Icon(Icons.edit, size: 16),
                                 padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () => ShareService.launchWhatsApp(
-                                    context,
-                                    'https://wa.me/${c.phone!.replaceAll(RegExp(r'[^\d]'), '')}'),
+                                constraints: const BoxConstraints(
+                                    minWidth: 28, minHeight: 28),
+                                onPressed: () async {
+                                  await showDialog(
+                                      context: context,
+                                      builder: (_) => PartyFormDialog(
+                                          existing: c,
+                                          partyType: 'customer'));
+                                  setState(() {});
+                                },
                               ),
-                            if (c.email != null)
-                              IconButton(
-                                icon: const Icon(Icons.email,
-                                    color: Colors.blue, size: 18),
-                                tooltip: 'Email',
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () => ShareService.launchEmail(
-                                    context, 'mailto:${c.email}'),
-                              ),
-                            IconButton(
-                              icon: const Icon(Icons.edit, size: 18),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              onPressed: () async {
-                                await showDialog(
-                                    context: context,
-                                    builder: (_) => PartyFormDialog(
-                                        existing: c, partyType: 'customer'));
-                                setState(() {});
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

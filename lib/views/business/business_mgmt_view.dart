@@ -204,31 +204,37 @@ class _BusinessMgmtViewState extends State<BusinessMgmtView>
                               '${s.phone ?? 'No phone'} | ${s.email ?? 'No email'}\n'
                               'GSTIN: ${s.gstin ?? 'N/A'}'),
                           isThreeLine: true,
-                          trailing: Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center,
-                            crossAxisAlignment:
-                                CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                  'Purchases: ₹${totalPurchases.toStringAsFixed(0)}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              IconButton(
-                                icon: const Icon(Icons.edit,
-                                    size: 18),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: () async {
-                                  await showDialog(
-                                      context: context,
-                                      builder: (_) => PartyFormDialog(
-                                          existing: s,
-                                          partyType: 'supplier'));
-                                  setState(() {});
-                                },
-                              ),
-                            ],
+                          trailing: SizedBox(
+                            width: 140,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    '₹${totalPurchases.toStringAsFixed(0)}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.edit, size: 16),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                      minWidth: 28, minHeight: 28),
+                                  onPressed: () async {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_) => PartyFormDialog(
+                                            existing: s,
+                                            partyType: 'supplier'));
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

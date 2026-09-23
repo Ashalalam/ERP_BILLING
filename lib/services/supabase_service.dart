@@ -64,9 +64,6 @@ class SupabaseService extends ChangeNotifier {
   List<StockAdjustment> get stockAdjustments => List.unmodifiable(_stockAdjustments);
   List<AppUser> get users => List.unmodifiable(_users);
 
-  /// Safe static accessor for widgets that can't use dependency injection
-  static SupabaseService? _getInstanceForWidget() => instance;
-
   void setActiveCompany(Company company) {
     _activeCompany = company;
     notifyListeners();

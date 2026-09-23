@@ -106,34 +106,58 @@ class _InventoryViewState extends State<InventoryView> with SingleTickerProvider
                         'Mfr: ${p.manufacturer ?? 'N/A'} | Unit: ${p.unit ?? 'N/A'} | Pack: ${p.packSize ?? 'N/A'}\n'
                         'Location: ${p.rack ?? 'Unassigned'}, ${p.shelf ?? ''}'),
                     isThreeLine: true,
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('$totalStock Units',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: totalStock <= p.reorderLevel ? Colors.orange : null,
-                            )),
-                        Chip(
-                          label: Text(p.scheduleType, style: const TextStyle(fontSize: 10)),
-                          padding: EdgeInsets.zero,
-                          side: BorderSide.none,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.edit, size: 18),
-                          onPressed: () async {
-                            final updated = await showDialog<bool>(
-                              context: context,
-                              builder: (_) => ProductFormDialog(existing: p),
-                            );
-                            if (updated == true) setState(() {});
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                      ],
+                    trailing: SizedBox(
+                      width: 130,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text('$totalStock units',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                    color: totalStock <= p.reorderLevel
+                                        ? Colors.orange
+                                        : null,
+                                  )),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: p.scheduleType == 'OTC'
+                                      ? Colors.green.withValues(alpha: 0.15)
+                                      : Colors.red.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(p.scheduleType,
+                                    style: TextStyle(
+                                        fontSize: 9,
+                                        color: p.scheduleType == 'OTC'
+                                            ? Colors.green
+                                            : Colors.red,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit, size: 16),
+                            onPressed: () async {
+                              final updated = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => ProductFormDialog(existing: p),
+                              );
+                              if (updated == true) setState(() {});
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                                minWidth: 28, minHeight: 28),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

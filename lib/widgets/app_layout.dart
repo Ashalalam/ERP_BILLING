@@ -302,12 +302,9 @@ class _ExpiryAlertBell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Count near-expiry batches from service
-    final db = SupabaseService._getInstanceForWidget();
+    final db = SupabaseService.instance;
     final now = DateTime.now();
-    final alertCount = db == null
-        ? 0
-        : db.batches
+    final alertCount = db.batches
             .where((b) =>
                 b.expiryDate.isAfter(now) &&
                 b.expiryDate
