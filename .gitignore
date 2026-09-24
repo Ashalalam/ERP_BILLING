@@ -43,10 +43,9 @@ linux/
 
 # Environment / secrets — NEVER commit these
 .env
-.env.*
+!.env.example
 secrets.dart
 **/secrets/**
-*.env
 
 # OS
 .DS_Store
