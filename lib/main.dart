@@ -11,7 +11,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Load environment variables from .env asset
-  await dotenv.load(fileName: '.env');
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (e) {
+    debugPrint('.env load notice: $e');
+  }
 
   final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
   final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
