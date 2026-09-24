@@ -69,15 +69,23 @@ class SupabaseService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void useDemoMode() {
+    if (_companies.isEmpty) {
+      _companies.clear();
+      _seedInitialDemoData();
+      notifyListeners();
+    }
+  }
+
   // ── Initialisation ───────────────────────────────────────────────────────
 
   /// Call once at app startup. Tries to load from Supabase; falls back to demo.
   Future<void> initialize() async {
     try {
-      await _loadFromSupabase();
+      await _loadFromSupabase().timeout(const Duration(seconds: 3));
     } catch (e) {
       debugPrint('Supabase load failed ($e). Using demo data.');
-      _seedInitialDemoData();
+      useDemoMode();
     }
     notifyListeners();
   }

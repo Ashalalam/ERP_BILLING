@@ -34,8 +34,19 @@ void main() async {
     debugPrint('Supabase credentials not configured. Running in demo mode.');
   }
 
-  // Load data (from Supabase or demo fallback)
-  await SupabaseService.instance.initialize();
+  // Load data (from Supabase or demo fallback) with 3s timeout protection
+  try {
+    await SupabaseService.instance.initialize().timeout(
+      const Duration(seconds: 3),
+      onTimeout: () {
+        debugPrint('Initialization timeout — loading demo dataset.');
+        SupabaseService.instance.useDemoMode();
+      },
+    );
+  } catch (e) {
+    debugPrint('SupabaseService initialize error: $e');
+    SupabaseService.instance.useDemoMode();
+  }
 
   runApp(const BillSproutApp());
 }
