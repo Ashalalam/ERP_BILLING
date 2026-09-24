@@ -94,7 +94,9 @@ class SupabaseService extends ChangeNotifier {
     final companiesData = await _client.from('companies').select();
     if ((companiesData as List).isEmpty) {
       _seedInitialDemoData();
-      await _pushSeedToSupabase();
+      if (kDebugMode) {
+        await _pushSeedToSupabase();
+      }
       return;
     }
 

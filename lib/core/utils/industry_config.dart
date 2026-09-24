@@ -330,12 +330,11 @@ class IndustryState extends ChangeNotifier {
 
   String _activeIndustry = 'Pharma';
 
-  String get activeId => _activeIndustry;
-  IndustryConfig get config => IndustryConfig.get(_activeIndustry);
+  String get activeId => 'Pharma';
+  IndustryConfig get config => IndustryConfig.get('Pharma');
 
   void setIndustry(String id) {
-    if (_activeIndustry == id) return;
-    _activeIndustry = id;
+    _activeIndustry = 'Pharma';
     notifyListeners();
   }
 }
