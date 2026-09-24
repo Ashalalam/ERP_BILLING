@@ -1,11 +1,11 @@
 {
-    "name": "erp_billing",
-    "short_name": "erp_billing",
+    "name": "BillSprout ERP & Billing",
+    "short_name": "BillSprout",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0F52BA",
+    "theme_color": "#0F52BA",
+    "description": "BillSprout — Smart ERP & Billing Software by LIFESPROUT CARE.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

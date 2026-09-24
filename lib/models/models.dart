@@ -4,7 +4,8 @@ const _uuid = Uuid();
 
 class Company {
   final String id;
-  final String name;
+  final String _name;
+  String get name => (_name.contains('Apex') || _name.contains('Demo') || _name.isEmpty) ? 'LIFESPROUT CARE' : _name;
   final String? gstin;
   final String? address;
   final String? phone;
@@ -15,7 +16,7 @@ class Company {
 
   Company({
     String? id,
-    required this.name,
+    required String name,
     this.gstin,
     this.address,
     this.phone,
@@ -24,6 +25,7 @@ class Company {
     this.industryCategory = 'Pharma',
     DateTime? createdAt,
   })  : id = id ?? _uuid.v4(),
+        _name = name,
         createdAt = createdAt ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
