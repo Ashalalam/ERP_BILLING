@@ -249,10 +249,17 @@ class _AppLayoutState extends State<AppLayout> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(cfg.icon, color: cfg.color, size: 28),
-                        const SizedBox(height: 2),
-                        Text('Bill', style: TextStyle(fontSize: 9, color: cfg.color, fontWeight: FontWeight.bold)),
-                        Text('Sprout', style: TextStyle(fontSize: 9, color: cfg.color, fontWeight: FontWeight.bold)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.asset(
+                            'assets/images/lifesprout_logo.jpg',
+                            height: 32,
+                            width: 32,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text('BillSprout', style: TextStyle(fontSize: 8, color: cfg.color, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),

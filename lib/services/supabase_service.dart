@@ -961,7 +961,7 @@ class SupabaseService extends ChangeNotifier {
 
   void _seedInitialDemoData() {
     final company = Company(
-      name: 'BillSprout Demo Company',
+      name: 'LIFESPROUT CARE',
       gstin: '27AAAAA0000A1Z5',
       address: '101 Healthcare Plaza, Mumbai, India',
       phone: '+91 9876543210',

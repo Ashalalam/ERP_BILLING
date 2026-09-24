@@ -61,7 +61,14 @@ class _LoginViewState extends State<LoginView> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.local_pharmacy, size: 56, color: Color(0xFF0F52BA)),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/images/lifesprout_logo.jpg',
+                  height: 84,
+                  fit: BoxFit.contain,
+                ),
+              ),
               const SizedBox(height: 16),
               Text(
                 'BillSprout',
