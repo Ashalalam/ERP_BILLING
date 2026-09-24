@@ -21,8 +21,8 @@ class _FastPosViewState extends State<FastPosView> {
   final _db = SupabaseService.instance;
   final _cfg = IndustryState.instance;
   final _barcodeController = TextEditingController();
-  final _patientNameController = TextEditingController(text: 'Rahul Sharma');
-  final _doctorNameController = TextEditingController(text: 'Dr. A. K. Gupta');
+  final _patientNameController = TextEditingController();
+  final _doctorNameController = TextEditingController();
   final _searchController = TextEditingController();
 
   String _selectedPricingTier = 'retail';
@@ -528,7 +528,13 @@ class _FastPosViewState extends State<FastPosView> {
                       onChanged: (v) {
                         setState(() {
                           _selectedParty = v;
-                          if (v != null) _selectedPricingTier = v.pricingTier;
+                          if (v != null) {
+                            _selectedPricingTier = v.pricingTier;
+                            // Auto-fill patient name from customer name
+                            if (_patientNameController.text.isEmpty) {
+                              _patientNameController.text = v.name;
+                            }
+                          }
                         });
                       },
                     ),

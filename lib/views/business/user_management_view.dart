@@ -64,9 +64,21 @@ class _UserManagementViewState extends State<UserManagementView> {
                               fontWeight: FontWeight.bold)),
                       subtitle: Text(
                           '${u.email} | Role: ${u.roleName}'),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _showEditUserDialog(u),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, size: 20),
+                            tooltip: 'Edit user',
+                            onPressed: () => _showEditUserDialog(u),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline,
+                                color: Colors.red, size: 20),
+                            tooltip: 'Delete user',
+                            onPressed: () => _confirmDeleteUser(u),
+                          ),
+                        ],
                       ),
                       children: [
                         Padding(
@@ -125,6 +137,41 @@ class _UserManagementViewState extends State<UserManagementView> {
 
   void _showAddUserDialog() => _showUserDialog(null);
   void _showEditUserDialog(AppUser user) => _showUserDialog(user);
+
+  void _confirmDeleteUser(AppUser user) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: const Icon(Icons.warning, color: Colors.red),
+        title: const Text('Delete User?'),
+        content: Text(
+            'Are you sure you want to delete "${user.fullName}"?\nThis action cannot be undone.'),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel')),
+          ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              await _db.deleteUser(user.id);
+              if (ctx.mounted) {
+                Navigator.pop(ctx);
+                setState(() {});
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('User ${user.fullName} deleted.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showUserDialog(AppUser? existing) {
     final nameCtrl =
@@ -201,26 +248,52 @@ class _UserManagementViewState extends State<UserManagementView> {
               onPressed: () => Navigator.pop(ctx),
               child: const Text('Cancel')),
           ElevatedButton(
-            onPressed: () {
-              if (nameCtrl.text.isEmpty ||
-                  emailCtrl.text.isEmpty) return;
+            onPressed: () async {
+              if (nameCtrl.text.trim().isEmpty ||
+                  emailCtrl.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Name and Email are required.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
               final perms = Map<String, dynamic>.fromEntries(
                 permissions.entries
                     .where((e) => e.value)
                     .map((e) => MapEntry(e.key, true)),
               );
               if (existing == null) {
-                _db.users.isEmpty; // just notify
+                final newUser = AppUser(
+                  companyId: _db.activeCompany?.id ?? '',
+                  email: emailCtrl.text.trim(),
+                  fullName: nameCtrl.text.trim(),
+                  roleName: role,
+                  permissions: perms,
+                );
+                await _db.addUser(newUser);
+              } else {
+                final updated = existing.copyWith(
+                  email: emailCtrl.text.trim(),
+                  fullName: nameCtrl.text.trim(),
+                  roleName: role,
+                  permissions: perms,
+                );
+                await _db.updateUser(updated);
               }
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+              if (ctx.mounted) {
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
                     content: Text(existing == null
-                        ? 'User ${nameCtrl.text} added.'
-                        : 'User ${nameCtrl.text} updated.'),
-                    backgroundColor: Colors.green),
-              );
-              setState(() {});
+                        ? 'User ${nameCtrl.text} added successfully.'
+                        : 'User ${nameCtrl.text} updated successfully.'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                setState(() {});
+              }
             },
             child: const Text('Save'),
           ),

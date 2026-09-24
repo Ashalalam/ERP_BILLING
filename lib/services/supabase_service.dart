@@ -485,6 +485,42 @@ class SupabaseService extends ChangeNotifier {
     }
   }
 
+  // ── User CRUD ────────────────────────────────────────────────────────────
+
+  Future<void> addUser(AppUser user) async {
+    _users.add(user);
+    _logAudit('USER_ADD', {'email': user.email, 'role': user.roleName});
+    notifyListeners();
+    try {
+      await _client.from('app_users').insert(user.toJson());
+    } catch (e) {
+      debugPrint('addUser DB error: $e');
+    }
+  }
+
+  Future<void> updateUser(AppUser user) async {
+    final idx = _users.indexWhere((u) => u.id == user.id);
+    if (idx >= 0) _users[idx] = user;
+    _logAudit('USER_UPDATE', {'email': user.email, 'role': user.roleName});
+    notifyListeners();
+    try {
+      await _client.from('app_users').update(user.toJson()).eq('id', user.id);
+    } catch (e) {
+      debugPrint('updateUser DB error: $e');
+    }
+  }
+
+  Future<void> deleteUser(String userId) async {
+    _users.removeWhere((u) => u.id == userId);
+    _logAudit('USER_DELETE', {'user_id': userId});
+    notifyListeners();
+    try {
+      await _client.from('app_users').delete().eq('id', userId);
+    } catch (e) {
+      debugPrint('deleteUser DB error: $e');
+    }
+  }
+
   // ── Party CRUD ───────────────────────────────────────────────────────────
 
   Future<void> addParty(Party party) async {

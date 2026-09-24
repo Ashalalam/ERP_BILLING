@@ -37,6 +37,7 @@ dependencies:
   uuid: ^4.4.0
   csv: ^6.0.0
   collection: ^1.18.0
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -45,3 +46,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env

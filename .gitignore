@@ -36,7 +36,7 @@ Pods/
 build/windows/
 
 # Web
-web/
+# web/ source is tracked; build/web/ output is ignored via build/
 
 # Linux
 linux/
@@ -46,6 +46,7 @@ linux/
 .env.*
 secrets.dart
 **/secrets/**
+*.env
 
 # OS
 .DS_Store
